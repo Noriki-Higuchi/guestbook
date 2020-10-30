@@ -13,24 +13,24 @@ use Twig\Environment;
 
 class ConferenceController extends AbstractController
 {
+    private $twig;
+
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
     /**
      * @Route ("/", name="home")
-     * @param Environment $twig
-     * @param ConferenceRepository $conferenceRepository
-     * @return Response
      */
-    public function index(Environment $twig, ConferenceRepository $conferenceRepository)
+    public function index(ConferenceRepository $conferenceRepository)
     {
-        return new Response($twig->render('conference/index.html.twig', [
+        return new Response($this->twig->render('conference/index.html.twig', [
             'conferences' => $conferenceRepository->findAll(),
         ]));
     }
 
     /**
      * @Route("/conference/{id}", name="conference")
-     * @param Environment $twig
-     * @param Conference $conference
-     * @param CommentRepository $commentRepository
      */
     public function show(Request $request, Environment $twig, Conference $conference, CommentRepository $commentRepository)
     {
